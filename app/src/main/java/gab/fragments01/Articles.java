@@ -9,11 +9,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class Articles extends Fragment {
+    private TextView articlesTextView;
+    private String msg;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_articles, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_articles, container, false);
+
+        articlesTextView = (TextView) rootView.findViewById(R.id.articles_textview);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState != null)
+            articlesTextView.setText(savedInstanceState.getString("MSG"));
     }
 
     @Override
@@ -21,8 +35,21 @@ public class Articles extends Fragment {
         super.onStart();
         Bundle args = getArguments();
         if(args != null){
-            TextView articlesTextView = (TextView) getActivity().findViewById(R.id.articles_textview);
             articlesTextView.setText(args.getString("MSG"));
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        msg = articlesTextView.getText().toString();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(!msg.equals("")){
+            outState.putString("MSG",msg);
         }
     }
 }
