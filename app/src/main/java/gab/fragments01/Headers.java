@@ -29,7 +29,9 @@ public class Headers extends Fragment{
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_headers, menu);
+        if(menu.findItem(R.id.action_headers) == null) {
+            inflater.inflate(R.menu.menu_headers, menu);
+        }
     }
 
     @Override
