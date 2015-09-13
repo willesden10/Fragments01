@@ -4,22 +4,32 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
+    private final static String TAG = "------";
+    //The value of the member variables are kept when the activity is recreated.
+    private static boolean isHeadersLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (findViewById(R.id.fragment_headers) == null && savedInstanceState == null) {
+        //if fragment_headers == null phone is in portrait mode.
+        //isHeadersLoaded is false when Headers never has been loaded.
+        Log.i(TAG,Boolean.valueOf(isHeadersLoaded).toString());
+        if (findViewById(R.id.fragment_headers) == null && !isHeadersLoaded){
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             fragmentTransaction.add(R.id.activity_container, new Headers());
             fragmentTransaction.commit();
+            isHeadersLoaded = true;
+            Log.i(TAG,"Fragment Headers is loaded");
         }
     }
 
@@ -44,4 +54,5 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
