@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Headers extends Fragment{
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,10 +33,7 @@ public class Headers extends Fragment{
             headersTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.activity_container, new Articles());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                //Communicate with MainActivity to change fragments
                 }
             });
         }
