@@ -1,9 +1,12 @@
 package gab.fragments01;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +18,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Headers extends Fragment{
+    onHeaderClickListener mCallBack;
+
+    //The container activity must implement this interface so the Headers fragment can deliver messages
+    public interface onHeaderClickListener{
+        void onHeaderClick(String msg);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Log.i(MainActivity.TAG, "onAttach(Context context)");
+
+        try{
+            mCallBack = (onHeaderClickListener) activity;
+        }
+        catch(ClassCastException exc){
+            Log.i("------"," Class cast exception");
+            throw new ClassCastException(activity.toString() +" Must implement onHeadersClickListner interface");
+
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,16 +52,13 @@ public class Headers extends Fragment{
         super.onStart();
         setHasOptionsMenu(true);
 
-        Articles articles = (Articles) getFragmentManager().findFragmentById(R.id.fragment_articles);
-        if(articles == null){
             TextView headersTextView = (TextView) getActivity().findViewById(R.id.headers_textview);
             headersTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                //Communicate with MainActivity to change fragments
+                mCallBack.onHeaderClick("Message from fragment Headers");
                 }
             });
-        }
     }
 
     @Override

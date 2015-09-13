@@ -11,11 +11,32 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends Activity {
-    private final static String TAG = "------";
-    //The value of the member variables are kept when the activity is recreated.
-    private static boolean isHeadersLoaded = false;
+public class MainActivity extends Activity implements Headers.onHeaderClickListener{
+    public final static String TAG = "------";
+
+    @Override
+    public void onHeaderClick(String msg) {
+        Articles articles = (Articles) getFragmentManager().findFragmentById(R.id.fragment_articles);
+        TextView articlesTextView = (TextView) findViewById(R.id.articles_textview);
+        if(articles == null || articlesTextView == null){
+            Bundle bundle = new Bundle();
+            bundle.putString("MSG",msg);
+
+            articles = new Articles();
+            articles.setArguments(bundle);
+
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.activity_container, articles);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        }
+        else{
+            articlesTextView.setText(msg);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,16 +45,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //if fragment_headers == null phone is in portrait mode.
-        //isHeadersLoaded is false when Headers never has been loaded.
-
-
         if (findViewById(R.id.fragment_headers) == null && savedInstanceState == null){
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.activity_container, new Headers(),"headers");
             fragmentTransaction.commit();
             Log.i(TAG, "Headers loaded");
-            isHeadersLoaded = true;
         }
     }
 
@@ -60,7 +77,6 @@ public class MainActivity extends Activity {
             fragmentTransaction.add(R.id.activity_container, new Headers(),"headers");
             fragmentTransaction.commit();
             Log.i(TAG, "Headers loaded");
-            isHeadersLoaded = true;
         }
     }
 
