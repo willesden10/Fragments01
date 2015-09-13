@@ -21,7 +21,6 @@ public class MainActivity extends Activity {
 
         //if fragment_headers == null phone is in portrait mode.
         //isHeadersLoaded is false when Headers never has been loaded.
-        Log.i(TAG,Boolean.valueOf(isHeadersLoaded).toString());
         if (findViewById(R.id.fragment_headers) == null && !isHeadersLoaded){
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -29,8 +28,9 @@ public class MainActivity extends Activity {
             fragmentTransaction.add(R.id.activity_container, new Headers());
             fragmentTransaction.commit();
             isHeadersLoaded = true;
-            Log.i(TAG,"Fragment Headers is loaded");
         }
+
+
     }
 
     @Override
