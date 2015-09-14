@@ -17,26 +17,25 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Headers extends Fragment{
+public class Headers extends Fragment {
     private static final String TAG = Headers.class.toString();
+    //member object which is used to call back the MainActivity
     onHeaderClickListener mCallBack;
 
     //The container activity must implement this interface so the Headers fragment can deliver messages
-    public interface onHeaderClickListener{
+    public interface onHeaderClickListener {
         void onHeaderClick(String msg);
     }
 
+    //If the activity which load the fragment doesn't implement the interface a ClassCastException is thrown
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.i(TAG, "onAttach(Context context)");
 
-        try{
+        try {
             mCallBack = (onHeaderClickListener) activity;
-        }
-        catch(ClassCastException exc){
-            Log.i("------"," Class cast exception");
-            throw new ClassCastException(activity.toString() +" Must implement onHeadersClickListner interface");
+        } catch (ClassCastException exc) {
+            throw new ClassCastException(activity.toString() + " Must implement onHeadersClickListner interface");
 
         }
     }
@@ -45,36 +44,43 @@ public class Headers extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_headers, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_headers, container, false);
+
+        //When headersTextView is clicked a message is sent to the MainActivity throw mCallBack object
+        TextView headersTextView = (TextView) rootView.findViewById(R.id.headers_textview);
+        headersTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallBack.onHeaderClick("Message from fragment Headers :-)");
+            }
+        });
+        return rootView;
     }
+
 
     @Override
     public void onStart() {
         super.onStart();
         setHasOptionsMenu(true);
-
-            TextView headersTextView = (TextView) getActivity().findViewById(R.id.headers_textview);
-            headersTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                mCallBack.onHeaderClick("Message from fragment Headers");
-                }
-            });
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.i(TAG, "onCreateOptionsMenu in Headers");
         super.onCreateOptionsMenu(menu, inflater);
-        if(menu.findItem(R.id.action_headers) == null) {
-            inflater.inflate(R.menu.menu_headers, menu);
-        }
+
+        //Menu item are deleted each time the options menu is loaded to prevent duplicated items.
+        menu.clear();
+        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_headers, menu);
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_headers){
-            Toast.makeText(getActivity(),"Headers settings selected",Toast.LENGTH_SHORT).show();
+        if (id == R.id.action_headers) {
+            Toast.makeText(getActivity(), "Headers settings selected", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);

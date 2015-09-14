@@ -1,3 +1,11 @@
+/*
+* This app in landscape mode shows tow fragments: Headers and Articles
+* when clicking on the title of the fragment Headers the fragment Articles shows a message.
+*
+* In portrait mode when clicking on the title of the fragment Headers, the fragment Articles is loaded replacing Headers
+* and shows a message.
+* */
+
 package gab.fragments01;
 
 import android.app.Activity;
@@ -47,7 +55,6 @@ public class MainActivity extends Activity implements Headers.onHeaderClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG,"On Create");
         setContentView(R.layout.activity_main);
 
         //the fragment Headers is only loaded is the phone is in portrait mode -> fragment_headers == null
@@ -70,7 +77,6 @@ public class MainActivity extends Activity implements Headers.onHeaderClickListe
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.i(TAG, "On Restore Instace State");
         FragmentManager fragmentManager = getFragmentManager();
         Headers headers = (Headers) fragmentManager.findFragmentByTag("headers");
         if (findViewById(R.id.fragment_headers) == null && headers == null){
@@ -83,8 +89,8 @@ public class MainActivity extends Activity implements Headers.onHeaderClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu);
+        //The Options Menu is loaded in the fragment Headers to prevent duplicated items.
         return true;
     }
 
@@ -102,11 +108,4 @@ public class MainActivity extends Activity implements Headers.onHeaderClickListe
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.i(TAG,"On Saved Instance State");
-    }
-
 }

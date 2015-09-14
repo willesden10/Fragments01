@@ -7,4 +7,9 @@
         android:orderInCategory="10"
         android:id="@+id/action_headers"
         app:showAsAction="never"/>
+
+    <item android:title="More Options"
+          android:orderInCategory="20"
+          android:id="@+id/action_more"
+          app:showAsAction="never"/>
 </menu>
