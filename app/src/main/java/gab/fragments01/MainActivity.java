@@ -14,8 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements Headers.onHeaderClickListener{
-    public final static String TAG = "------";
+    private static final String TAG =MainActivity.class.toString();
+    private static boolean isHeadersLoadedSinglePanel = false;
 
+
+    //Interface's method that allow fragments to communicate with MainActivity.
     @Override
     public void onHeaderClick(String msg) {
         Articles articles = (Articles) getFragmentManager().findFragmentById(R.id.fragment_articles);
@@ -44,28 +47,23 @@ public class MainActivity extends Activity implements Headers.onHeaderClickListe
         Log.i(TAG,"On Create");
         setContentView(R.layout.activity_main);
 
-        //if fragment_headers == null phone is in portrait mode.
+        //the fragment Headers is only loaded is the phone is in portrait mode -> fragment_headers == null
+        //and if the app is created for the first time -> saveInstanceState == null
         if (findViewById(R.id.fragment_headers) == null && savedInstanceState == null){
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            //The fragment headers is given a tag "headers" so hat it can be found later using fragmentManager.findFragmentByTag(String);
             fragmentTransaction.add(R.id.activity_container, new Headers(),"headers");
             fragmentTransaction.commit();
+            isHeadersLoadedSinglePanel = true;
             Log.i(TAG, "Headers loaded");
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.i(TAG,"On Start");
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(TAG,"On Resume");
-    }
-
+    //When the activity is recreated after changing orientation for instance the fragment Headers is loaded
+    //if the orientation is portrait -> fragment_headers -> null
+    //and if the fragment Headers has not been loaded previously -> headers == null
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -108,21 +106,4 @@ public class MainActivity extends Activity implements Headers.onHeaderClickListe
         Log.i(TAG,"On Saved Instance State");
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.i(TAG,"On Pause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.i(TAG,"On Stop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG,"Activity destroyed");
-    }
 }

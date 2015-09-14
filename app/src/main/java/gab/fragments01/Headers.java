@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Headers extends Fragment{
+    private static final String TAG = Headers.class.toString();
     onHeaderClickListener mCallBack;
 
     //The container activity must implement this interface so the Headers fragment can deliver messages
@@ -28,7 +29,7 @@ public class Headers extends Fragment{
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.i(MainActivity.TAG, "onAttach(Context context)");
+        Log.i(TAG, "onAttach(Context context)");
 
         try{
             mCallBack = (onHeaderClickListener) activity;
