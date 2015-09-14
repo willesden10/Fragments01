@@ -21,13 +21,15 @@ public class MainActivity extends Activity implements Headers.onHeaderClickListe
     //Interface's method that allow fragments to communicate with MainActivity.
     @Override
     public void onHeaderClick(String msg) {
-        Articles articles = (Articles) getFragmentManager().findFragmentById(R.id.fragment_articles);
-        TextView articlesTextView = (TextView) findViewById(R.id.articles_textview);
-        if(articles == null || articlesTextView == null){
+
+        //articles == null -> We are in portrait mode, we have to change fragment from Headers to Articles.
+        //When you add a fragment as a part of your activity layout, it lives in a ViewGroup inside the activity's view hierarchy
+        // and the fragment defines its own view layout -- That's why you use findViewById instead of findFragmentById
+        if(findViewById(R.id.fragment_articles) == null){
             Bundle bundle = new Bundle();
             bundle.putString("MSG",msg);
 
-            articles = new Articles();
+            Articles articles = new Articles();
             articles.setArguments(bundle);
 
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -37,6 +39,7 @@ public class MainActivity extends Activity implements Headers.onHeaderClickListe
 
         }
         else{
+            TextView articlesTextView = (TextView) findViewById(R.id.articles_textview);
             articlesTextView.setText(msg);
         }
     }
