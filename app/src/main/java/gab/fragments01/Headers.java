@@ -66,7 +66,6 @@ public class Headers extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.i(TAG, "onCreateOptionsMenu in Headers");
         super.onCreateOptionsMenu(menu, inflater);
 
         //Menu item are deleted each time the options menu is loaded to prevent duplicated items.
